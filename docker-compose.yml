@@ -1,0 +1,47 @@
+version: "3"
+services:
+  db:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  redis:
+    image: redis:3.0.5
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/var/lib/redis/data
+  web:
+    build:
+      context: .
+      dockerfile: ops/dev/Dockerfile
+    image: app
+    command: bash -c "yarn && bundle exec rails s -b 0.0.0.0"
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./compose-files/docker-compose.env
+    tty: true
+    stdin_open: true
+    depends_on:
+      - db
+      - redis
+  sidekiq:
+    build:
+      context: .
+      dockerfile: ops/dev/Dockerfile
+    command: bundle exec sidekiq
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./:/app
+    env_file:
+      - ./compose-files/docker-compose.env
+volumes:
+  redis:
+  postgres:
+
