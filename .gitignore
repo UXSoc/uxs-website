@@ -33,3 +33,14 @@ yarn-debug.log*
 /node_modules
 yarn-debug.log*
 .yarn-integrity
+
+/config/database.yml
+.env.local
+.env.test.local
+storage/.keep
+
+# Ignore the default SQLite database
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+.DS_Store
