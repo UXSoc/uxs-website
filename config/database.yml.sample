@@ -2,7 +2,7 @@
 development: &default
   adapter: postgresql
   encoding: unicode
-  database: bph_development
+  database: uxs_development
   pool: 5
   username: postgres
   password:
@@ -11,8 +11,8 @@ development: &default
 
 test:
   <<: *default
-  database: bph_test
+  database: uxs_test
 
 production:
   <<: *default
-  database: bph_production
+  database: uxs_production
