@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  comfy_route :cms_admin, path: "/admin"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users
@@ -12,4 +13,7 @@ Rails.application.routes.draw do
       root "devise/sessions#new"
     end
   end
+
+  # Ensure that this route is defined last
+  comfy_route :cms, path: "/"
 end
