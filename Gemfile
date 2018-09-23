@@ -13,10 +13,18 @@ gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.0'
 gem 'sass-rails', '~> 5.0'
 gem 'sendgrid-actionmailer', '~> 0.2.1'
+gem 'slim-rails'
 gem 'turbolinks', '~> 5'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
+
+# trailblazer
+gem 'trailblazer', '>= 2.0.3'
+gem 'trailblazer-rails'
+gem 'trailblazer-cells'
+gem 'cells-rails'
+gem 'cells-slim'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
