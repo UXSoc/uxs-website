@@ -31,7 +31,6 @@ ADD Gemfile $APP/Gemfile
 ADD Gemfile.lock $APP/Gemfile.lock
 
 RUN gem install bundler --no-ri --no-rdoc && \
-  bundle config https://gem.fury.io/bloomsolutions/ $FURY_AUTH && \
   bundle install --jobs 20 --retry 5 --without development test
 
 ADD . $APP
