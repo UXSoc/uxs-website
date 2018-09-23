@@ -79,10 +79,10 @@ jobs:
           name: Push application Docker image
           command: |
             docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
-            docker tag app $DOCKER_HUB_USER_ID/$DOCKER_HUB_REPO:$CIRCLE_SHA1
-            docker tag app $DOCKER_HUB_USER_ID/$DOCKER_HUB_REPO:latest
-            docker push $DOCKER_HUB_USER_ID/$DOCKER_HUB_REPO:$CIRCLE_SHA1
-            docker push $DOCKER_HUB_USER_ID/$DOCKER_HUB_REPO:latest
+            docker tag app $DOCKER_HUB_ORG_ID/$DOCKER_HUB_REPO:$CIRCLE_SHA1
+            docker tag app $DOCKER_HUB_ORG_ID/$DOCKER_HUB_REPO:latest
+            docker push $DOCKER_HUB_ORG_ID/$DOCKER_HUB_REPO:$CIRCLE_SHA1
+            docker push $DOCKER_HUB_ORG_ID/$DOCKER_HUB_REPO:latest
 
       # collect reports
       - store_test_results:
