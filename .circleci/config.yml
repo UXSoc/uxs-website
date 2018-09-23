@@ -52,12 +52,18 @@ jobs:
           command: |
             bundle exec rspec spec
 
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /tmp/caches/app.tar
+
       # Docker stuff
       - run:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
-            docker load -i $HOME/caches/app.tar | true
+            docker load -i /tmp/caches/app.tar | true
 
       - run:
           name: Build application Docker image
@@ -67,13 +73,13 @@ jobs:
       - run:
           name: Save Docker image layer cache
           command: |
-            mkdir -p $HOME/caches
-            docker save -o $HOME/caches/app.tar app
+            mkdir -p /tmp/caches
+            docker save -o /tmp/caches/app.tar app
 
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
-            - /caches/app.tar
+            - /tmp/caches/app.tar
 
       - deploy:
           name: Push application Docker image
