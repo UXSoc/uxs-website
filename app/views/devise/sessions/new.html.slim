@@ -1,0 +1,47 @@
+.bg-blue.for-navbar-fixed-top
+  .section
+    .container
+      nav.level.is-mobile
+        .level-item.has-text-centered
+          figure.image.is-128x128
+            img src="https://bulma.io/images/placeholders/128x128.png"
+      h3.subtitle.has-text-centered UXSoc Member Login
+
+  .section
+    .container
+      = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+
+        /.field
+        /  p.control.has-icons-left
+        /    = f.text_field :partner_domain,
+        /      autocomplete: "off",
+        /      autofocus: true,
+        /      class: "input is-medium",
+        /      placeholder: "Partner Domain",
+        /      value: current_partner&.slug,
+        /      disabled: true
+        /    span.icon.is-medium.is-left
+        /      i.fas.fa-handshake
+
+        .field
+          p.control.has-icons-left
+            = f.email_field :email, value: @email, placeholder: "Email", autofocus: true, autocomplete: "email", class: "input is-medium #{'is-invalid' if resource.errors[:email].any?}"
+            span.icon.is-medium.is-left
+              i.fas.fa-envelope
+            - if resource.errors[:email].any?
+              .text-danger
+                small
+                  = resource.errors[:email].join(", ")
+
+        .field
+          p.control.has-icons-left
+            = f.password_field :password, placeholder: "Password", autocomplete: "off", class: "input is-medium #{'is-invalid' if resource.errors[:password].any?}"
+            span.icon.is-medium.is-left
+              i.fas.fa-lock
+            - if resource.errors[:password].any?
+              .text-danger
+                small
+                  = resource.errors[:password].join(", ")
+
+        = f.submit "Log in", class: "button is-link is-fullwidth"
+      = render "devise/shared/links"
