@@ -28,6 +28,8 @@ gem 'cells-slim'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 3.7'
 end
 
 group :development do
@@ -38,7 +40,6 @@ group :development do
 end
 
 group :test do
-  gem 'rspec-rails', '~> 3.7'
   gem 'capybara', '>= 2.15', '< 4.0'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
