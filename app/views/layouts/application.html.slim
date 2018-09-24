@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title User Experience Society | Global
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
+    = csrf_meta_tags
+    = csp_meta_tag
+    meta content="width=device-width, initial-scale=1" name="viewport" /
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload'
+
+  body.has-navbar-fixed-top
+    - if user_signed_in?
+      = render partial: "shared/header"
+    = render partial: "shared/flash"
+    = yield
