@@ -2,7 +2,16 @@
   "name": "uxs-website",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "3.5"
+    "@fortawesome/fontawesome-free": "^5.2.0",
+    "@fortawesome/free-brands-svg-icons": "^5.2.0",
+    "@fortawesome/free-regular-svg-icons": "^5.2.0",
+    "@fortawesome/free-solid-svg-icons": "^5.2.0",
+    "@rails/webpacker": "3.5",
+    "@salesforce-ux/design-system": "^2.6.2",
+    "bulma": "^0.7.1",
+    "rails-ujs": "^5.2.0",
+    "stimulus": "^1.0.1",
+    "turbolinks": "^5.1.1"
   },
   "devDependencies": {
     "webpack-dev-server": "2.11.2"
