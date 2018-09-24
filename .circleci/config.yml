@@ -1,10 +1,65 @@
 version: 2
 jobs:
+  build:
+    docker:
+      # specify the version you desire here
+       - image: circleci/ruby:2.5.1-node-browsers
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+       - image: circleci/postgres:9.6
+         environment:
+           POSTGRES_USER: postgres
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: make sure yarn is up to date
+          command: |
+            yarn install
+
+      - run:
+          name: install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: copy sample database
+          command: |
+            cp config/database.yml.sample config/database.yml
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:schema:load
+
+      - run:
+          name: run tests
+          command: |
+            bundle exec rspec spec
+
+      # collect reports
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+
   push_to_docker_hub:
-    branches:
-      only:
-        - master
-        - /staging-.*/
     docker:
       - image: circleci/ruby:2.5.1-node-browsers
     working_directory: ~/repo
@@ -79,61 +134,16 @@ jobs:
             docker push $DOCKER_HUB_ORG_ID/$DOCKER_HUB_REPO:$CIRCLE_SHA1
             docker push $DOCKER_HUB_ORG_ID/$DOCKER_HUB_REPO:latest
 
-  build:
-    docker:
-      # specify the version you desire here
-       - image: circleci/ruby:2.5.1-node-browsers
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-       - image: circleci/postgres:9.6
-         environment:
-           POSTGRES_USER: postgres
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-      - setup_remote_docker
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run:
-          name: make sure yarn is up to date
-          command: |
-            yarn install
-
-      - run:
-          name: install dependencies
-          command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
-
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-
-      - run:
-          name: copy sample database
-          command: |
-            cp config/database.yml.sample config/database.yml
-      - run: bundle exec rake db:create
-      - run: bundle exec rake db:schema:load
-
-      - run:
-          name: run tests
-          command: |
-            bundle exec rspec spec
-
-      # collect reports
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
+workflows:
+  version: 2
+  build-push:
+    jobs:
+      - build
+      - push_to_docker_hub:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+              - master
+              - /staging-.*/
