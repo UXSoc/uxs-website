@@ -87,8 +87,10 @@ end
 # Uncomment this module and `config.admin_auth` above to use custom admin authentication
 module CmsDeviseAuth
   def authenticate
-    unless current_user && current_user.admin?
-      redirect_to new_user_session_path
+    if current_user && current_user.editor?
+      return true
+    else
+      return false
     end
   end
 end

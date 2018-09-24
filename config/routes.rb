@@ -15,5 +15,5 @@ Rails.application.routes.draw do
   end
 
   # Ensure that this route is defined last
-  comfy_route :cms, path: "/"
+  comfy_route :cms, path: "/cms"
 end
