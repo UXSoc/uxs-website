@@ -1,0 +1,19 @@
+- if flash["error"]
+  .message.is-danger
+    .message-body
+      - if flash["error"].is_a?(String)
+        = flash["error"]
+      - else
+        ul
+          - flash["error"].each do |message|
+            li= message
+
+- if flash["success"]
+  .message.is-success
+    .message-body
+      = flash["success"]
+
+- if flash["notice"]
+  .message.is-info
+    .message-body
+      = flash["notice"]
